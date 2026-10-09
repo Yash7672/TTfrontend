@@ -1,0 +1,44 @@
+# ===========================================================================
+# FIXORA frontend (.gitignore)
+# ===========================================================================
+
+# -------------------------------- Dependencies ------------------------------
+node_modules/
+.pnp
+.pnp.js
+
+# ------------------------------- Build output -------------------------------
+dist/
+dist-ssr/
+build/
+*.local
+
+# Stray TypeScript build artifacts (the sources are the .ts files).
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# ---------------------------------- Logs ------------------------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --------------------------------- Secrets ----------------------------------
+# Never commit real credentials.
+.env
+*.env
+!.env.example
+
+# ----------------------------------- IDE ------------------------------------
+.idea/
+*.iml
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ------------------------------- Test output --------------------------------
+coverage/
+.nyc_output/

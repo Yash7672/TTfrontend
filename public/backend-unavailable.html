@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixora — backend unavailable</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f6f7f9;
+        color: #171a22;
+        font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      }
+      .card {
+        max-width: 34rem;
+        background: #fff;
+        border: 1px solid #d5d9e2;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 8px 24px -12px rgba(23, 26, 34, 0.18);
+      }
+      h1 { margin-top: 0; font-size: 1.4rem; }
+      code {
+        background: #eceef2;
+        padding: 0.15rem 0.4rem;
+        border-radius: 0.35rem;
+        font-size: 0.9em;
+      }
+      p { line-height: 1.6; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Fixora backend is not reachable</h1>
+      <p>
+        Nginx is running, but the request to the API failed. The backend container is
+        probably still starting or has stopped.
+      </p>
+      <p>Try:</p>
+      <p>
+        <code>docker compose ps</code><br />
+        <code>docker compose logs -f backend</code><br />
+        <code>docker compose up --build</code>
+      </p>
+      <p>
+        The API health endpoint is
+        <a href="/api/health">/api/health</a>.
+      </p>
+    </div>
+  </body>
+</html>
