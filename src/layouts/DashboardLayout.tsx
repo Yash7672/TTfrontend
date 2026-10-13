@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
+import { Suspense } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Header } from '../components/Header'
+import { RouteFallback } from '../components/RouteFallback'
 import { cn } from '../utils/format'
 
 export interface DashboardNavItem {
@@ -56,7 +58,9 @@ export function DashboardLayout({
           </nav>
 
           <div className="min-w-0 flex-1 space-y-6">
-            <Outlet />
+            <Suspense fallback={<RouteFallback />}>
+              <Outlet />
+            </Suspense>
           </div>
         </div>
       </div>

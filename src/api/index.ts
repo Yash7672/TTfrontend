@@ -1,4 +1,5 @@
 import { api } from './client'
+import { cachedRequest } from './cache'
 import type {
   AddressResponse,
   AdminDashboard,
@@ -56,10 +57,20 @@ export const userApi = {
 
 // -------------------------------------------------------------- catalogue
 
-export const catalogApi = {
-  categories: () => api.get<CategoryResponse[]>('/categories').then((r) => r.data),
+/** Structural catalogue data changes rarely; cache it briefly to stop Home/Search
+ *  refetching the same lists on every navigation. Never user-specific. */
+const CATALOGUE_TTL_MS = 5 * 60 * 1000
 
-  category: (id: number) => api.get<CategoryResponse>(`/categories/${id}`).then((r) => r.data),
+export const catalogApi = {
+  categories: () =>
+    cachedRequest('categories', CATALOGUE_TTL_MS, () =>
+      api.get<CategoryResponse[]>('/categories').then((r) => r.data),
+    ),
+
+  category: (id: number) =>
+    cachedRequest(`category:${id}`, CATALOGUE_TTL_MS, () =>
+      api.get<CategoryResponse>(`/categories/${id}`).then((r) => r.data),
+    ),
 
   categoryServices: (id: number, page = 0, size = 12) =>
     api
@@ -77,10 +88,15 @@ export const catalogApi = {
     sort?: string
   }) => api.get<PageResponse<ServiceResponse>>('/services', { params }).then((r) => r.data),
 
-  featured: () => api.get<ServiceResponse[]>('/services/featured').then((r) => r.data),
+  featured: () =>
+    cachedRequest('services:featured', CATALOGUE_TTL_MS, () =>
+      api.get<ServiceResponse[]>('/services/featured').then((r) => r.data),
+    ),
 
   popular: (limit = 8) =>
-    api.get<ServiceResponse[]>('/services/popular', { params: { limit } }).then((r) => r.data),
+    cachedRequest(`services:popular:${limit}`, CATALOGUE_TTL_MS, () =>
+      api.get<ServiceResponse[]>('/services/popular', { params: { limit } }).then((r) => r.data),
+    ),
 
   service: (id: number) => api.get<ServiceResponse>(`/services/${id}`).then((r) => r.data),
 

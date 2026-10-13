@@ -1,8 +1,9 @@
 import { Outlet, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { AiAssistantWidget } from '../components/AiAssistantWidget'
+import { RouteFallback } from '../components/RouteFallback'
 
 /** Storefront shell: header, page content, footer and the floating assistant. */
 export function MainLayout() {
@@ -16,7 +17,9 @@ export function MainLayout() {
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1">
-        <Outlet />
+        <Suspense fallback={<RouteFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
       <AiAssistantWidget />

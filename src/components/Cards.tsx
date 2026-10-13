@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { BadgeCheck, Clock, MapPin, Star } from 'lucide-react'
 import { CategoryIcon } from './CategoryIcon'
@@ -7,7 +8,7 @@ import { ProviderStatusBadge } from './StatusBadge'
 import { cn, duration, initials, inr, pricingLabel } from '../utils/format'
 import type { CategoryResponse, ProviderResponse, ServicePackageResponse, ServiceResponse } from '../types'
 
-export function CategoryCard({ category }: { category: CategoryResponse }) {
+function CategoryCardBase({ category }: { category: CategoryResponse }) {
   return (
     <Link
       to={`/category/${category.id}`}
@@ -31,7 +32,14 @@ export function CategoryCard({ category }: { category: CategoryResponse }) {
   )
 }
 
-export function ServiceCard({ service, compact = false }: { service: ServiceResponse; compact?: boolean }) {
+/*
+ * List cards are memoised: parent pages re-render on unrelated state changes
+ * (typing in a filter, toggling a menu) while the underlying catalogue item is
+ * unchanged, and these are the components rendered dozens of times per page.
+ */
+export const CategoryCard = memo(CategoryCardBase)
+
+function ServiceCardBase({ service, compact = false }: { service: ServiceResponse; compact?: boolean }) {
   return (
     <article className="card flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-lg">
       <Link to={`/services/${service.id}`} className="block">
@@ -82,6 +90,8 @@ export function ServiceCard({ service, compact = false }: { service: ServiceResp
     </article>
   )
 }
+
+export const ServiceCard = memo(ServiceCardBase)
 
 export function PackageCard({
   pkg,
@@ -135,7 +145,7 @@ export function PackageCard({
   )
 }
 
-export function ProviderCard({ provider }: { provider: ProviderResponse }) {
+function ProviderCardBase({ provider }: { provider: ProviderResponse }) {
   return (
     <article className="card flex flex-col gap-3 p-4">
       <div className="flex items-start justify-between gap-3">
@@ -190,3 +200,5 @@ export function ProviderCard({ provider }: { provider: ProviderResponse }) {
     </article>
   )
 }
+
+export const ProviderCard = memo(ProviderCardBase)
